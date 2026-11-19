@@ -55,10 +55,35 @@ pre{background:#05070f;color:#a5f3c4;padding:18px;border-radius:12px;overflow:au
 .steps li::before{content:counter(s);position:absolute;left:0;top:8px;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
 .steps b{color:var(--text)}
 .explain{background:var(--card);border:1px solid var(--border);border-left:4px solid var(--accent2);border-radius:12px;padding:22px}
+.term{background:#05070f;border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.term-bar{display:flex;gap:7px;align-items:center;padding:10px 14px;background:#0d1224;color:#8b95b8;font-size:.8rem}
+.term-bar i{width:11px;height:11px;border-radius:50%;display:inline-block}
+.term-body{padding:16px;height:300px;overflow:auto;font:14px/1.55 ui-monospace,Consolas,monospace;color:#a5f3c4;cursor:text}
+.term-body .in{color:#e8ecf8}.term-body .err{color:#fca5a5}.term-body .hl{color:#22d3ee}
+.term-line{display:flex;gap:8px}
+.term-line input{flex:1;background:none;border:0;outline:0;color:#e8ecf8;font:inherit}
+.hint{color:var(--muted);font-size:.85rem;margin-top:10px}
+.hint code,.hint button{background:var(--card);border:1px solid var(--border);color:var(--accent2);padding:2px 8px;border-radius:6px;font-family:ui-monospace,Consolas,monospace;font-size:.85rem;cursor:pointer;margin:2px}
+.panel{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.svc{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:10px}
+.svc small{color:var(--muted);display:block}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px;background:#ef4444}
+.on .dot{background:#22c55e;box-shadow:0 0 10px #22c55e}
+.sw{position:relative;width:46px;height:26px;background:#475069;border-radius:99px;border:0;cursor:pointer;transition:background .2s;flex:none}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+.on .sw{background:var(--accent)}.on .sw::after{transform:translateX(20px)}
+.fw{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;font:13px/1.8 ui-monospace,Consolas,monospace}
+.fw h3{font:600 1rem system-ui;margin-bottom:8px}
+.fw .row{display:flex;justify-content:space-between;border-bottom:1px dashed var(--border);padding:2px 0}
+.fw .allow{color:#22c55e}.fw .deny{color:#ef4444}
+form.contact{display:grid;gap:12px;max-width:520px;margin-bottom:18px}
+form.contact input,form.contact textarea{background:var(--card);border:1px solid var(--border);color:var(--text);padding:12px 14px;border-radius:10px;font:inherit}
+form.contact input:focus,form.contact textarea:focus{outline:2px solid var(--accent)}
+#msg-ok{color:#22c55e;margin-top:6px;min-height:1.4em}
 footer{text-align:center;padding:40px 5%;color:var(--muted);border-top:1px solid var(--border);font-size:.9rem}
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s}
 .reveal.show{opacity:1;transform:none}
-@media(max-width:720px){nav ul li:not(:last-child){display:none}.about,.project{grid-template-columns:1fr}.avatar{margin:auto}section{padding:60px 5%}}
+@media(max-width:720px){nav ul li:not(:last-child){display:none}.about,.project,.panel{grid-template-columns:1fr}.avatar{margin:auto}section{padding:60px 5%}}
 </style>
 </head>
 <body>
@@ -69,6 +94,8 @@ footer{text-align:center;padding:40px 5%;color:var(--muted);border-top:1px solid
     <li><a href="#que-es">¿Qué es esto?</a></li>
     <li><a href="#sobre-mi">Sobre mí</a></li>
     <li><a href="#proyecto">Proyecto</a></li>
+    <li><a href="#juego">Juego</a></li>
+    <li><a href="#terminal">Terminal</a></li>
     <li><a href="#contacto">Contacto</a></li>
     <li><button id="theme" aria-label="Cambiar tema">🌙</button></li>
   </ul>
@@ -149,14 +176,53 @@ dn: uid=juan,dc=empresa,dc=local</pre>
   </div>
 </section>
 
+<section id="panel" class="reveal">
+  <h2>Panel del servidor</h2>
+  <p class="sub">Simulación: prende y apaga servicios y mira cómo cambia el firewall.</p>
+  <div class="panel">
+    <div id="svcs"></div>
+    <div class="fw">
+      <h3>🔥 ufw status</h3>
+      <div id="fwrows"></div>
+      <div class="row" style="margin-top:8px"><span>default incoming</span><span class="deny">deny</span></div>
+      <div class="row"><span>default outgoing</span><span class="allow">allow</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="juego" class="reveal">
+  <h2>🎮 Defiende el servidor</h2>
+  <p class="sub">Toca los <b style="color:#ef4444">ataques rojos</b> para bloquearlos. Deja pasar los <b style="color:#22c55e">paquetes verdes</b>. Tienes 3 vidas.</p>
+  <canvas id="game" width="640" height="400" style="width:100%;max-width:640px;border-radius:14px;border:1px solid var(--border);background:#05070f;touch-action:none;display:block;cursor:pointer" aria-label="Juego Defiende el servidor"></canvas>
+  <p class="hint">Si bloqueas un paquete bueno pierdes una vida. Si se cuela un ataque, también.</p>
+</section>
+
+<section id="terminal" class="reveal">
+  <h2>Terminal interactiva</h2>
+  <p class="sub">Escribe comandos como en un servidor de verdad. Es una simulación segura.</p>
+  <div class="term">
+    <div class="term-bar"><i style="background:#ef4444"></i><i style="background:#eab308"></i><i style="background:#22c55e"></i>&nbsp; visitante@enterprise07: ~</div>
+    <div class="term-body" id="tb"><div id="out"></div>
+      <div class="term-line"><span class="hl">visitante@enterprise07:~$</span><input id="cmd" autocomplete="off" spellcheck="false" aria-label="Comando"></div>
+    </div>
+  </div>
+  <p class="hint">Prueba:
+    <button data-c="help">help</button><button data-c="whoami">whoami</button><button data-c="services">services</button><button data-c="ufw status">ufw status</button><button data-c="neofetch">neofetch</button>
+  </p>
+</section>
+
 <section id="contacto" class="reveal">
   <h2>Contacto</h2>
   <p class="sub">Si quieres hablar de tecnología, proyectos o prácticas.</p>
+  <form class="contact" id="form">
+    <input id="f-name" placeholder="Tu nombre" required>
+    <textarea id="f-msg" rows="4" placeholder="Escribe tu mensaje" required></textarea>
+    <div class="btns" id="send-btns"></div>
+  </form>
+  <div id="msg-ok"></div>
   <div class="btns">
-    <a class="btn primary" href="https://github.com/EDMB40" target="_blank" rel="noopener">GitHub</a>
-    <!-- Cuando quieras, agrega tu WhatsApp o correo así:
-    <a class="btn ghost" href="https://wa.me/57TUNUMERO" target="_blank" rel="noopener">WhatsApp</a>
-    <a class="btn ghost" href="mailto:tucorreo@gmail.com">Correo</a> -->
+    <a class="btn ghost" href="https://github.com/EDMB40" target="_blank" rel="noopener">GitHub</a>
+    <button class="btn ghost" id="share" type="button">🔗 Compartir esta página</button>
   </div>
 </section>
 
@@ -170,6 +236,141 @@ try{if(localStorage.getItem('tema')==='light'){body.classList.add('light');btn.t
 btn.onclick=()=>{const l=body.classList.toggle('light');btn.textContent=l?'☀️':'🌙';try{localStorage.setItem('tema',l?'light':'dark')}catch(e){}};
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target)}}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ====== CONFIGURA AQUÍ TUS DATOS DE CONTACTO (opcional) ======
+   WHATSAPP: número con código de país, sin + ni espacios. Ej: "573001234567"
+   EMAIL: tu correo. Ej: "micorreo@gmail.com"   Déjalos vacíos para ocultar el botón. */
+const WHATSAPP="", EMAIL="";
+
+/* ---- Panel de servicios ---- */
+const SV=[
+ {n:'OpenSSH',d:'Acceso remoto',p:[['OpenSSH','22/tcp']],on:true},
+ {n:'Apache',d:'Servidor web',p:[['80/tcp','80/tcp']],on:true},
+ {n:'Samba',d:'Archivos compartidos',p:[['Samba','139,445/tcp']],on:true},
+ {n:'OpenLDAP',d:'Directorio de usuarios',p:[['389/tcp','389/tcp']],on:true}
+];
+const box=document.getElementById('svcs'),fw=document.getElementById('fwrows');
+function draw(){
+ box.innerHTML='';fw.innerHTML='';
+ SV.forEach((s,i)=>{
+  const d=document.createElement('div');d.className='svc'+(s.on?' on':'');
+  d.innerHTML='<div><span class="dot"></span><b>'+s.n+'</b><small>'+s.d+' · '+(s.on?'active (running)':'inactive (dead)')+'</small></div><button class="sw" aria-label="Activar o desactivar '+s.n+'"></button>';
+  d.querySelector('button').onclick=()=>{s.on=!s.on;draw()};
+  box.appendChild(d);
+  if(s.on)s.p.forEach(p=>{const r=document.createElement('div');r.className='row';r.innerHTML='<span>'+p[1]+'</span><span class="allow">ALLOW IN</span>';fw.appendChild(r)});
+ });
+ if(!fw.children.length)fw.innerHTML='<div class="row"><span>(sin reglas)</span><span class="deny">todo bloqueado</span></div>';
+}
+draw();
+
+/* ---- Terminal simulada ---- */
+const out=document.getElementById('out'),inp=document.getElementById('cmd'),tb=document.getElementById('tb');
+const hist=[];let hi=0;
+function print(t,c){const d=document.createElement('div');if(c)d.className=c;d.style.whiteSpace='pre-wrap';d.textContent=t;out.appendChild(d);tb.scrollTop=tb.scrollHeight}
+const CMDS={
+ help:()=>'Comandos: help, whoami, about, services, ufw status, neofetch, ls, cat bienvenida.txt, date, ping, clear',
+ whoami:()=>'Eliel David Morrón Bolaño, estudiante de sistemas y administrador de enterprise07.',
+ about:()=>'NovaTech Solutions S.A.S. - taller práctico de Linux Server.\nServicios: SSH, Samba, Apache y OpenLDAP.',
+ services:()=>SV.map(s=>(s.on?'● ':'○ ')+s.n.padEnd(9)+(s.on?'active (running)':'inactive (dead)')).join('\n'),
+ 'ufw status':()=>'Status: active\n'+(SV.filter(s=>s.on).flatMap(s=>s.p).map(p=>p[1].padEnd(16)+'ALLOW IN').join('\n')||'(sin reglas)'),
+ neofetch:()=>'OS:      Ubuntu Server\nHost:    enterprise07\nShell:   bash\nRed:     VirtualBox (NAT)\nSitio:   Apache + GitHub Pages\nDueño:   Eliel Morrón',
+ ls:()=>'bienvenida.txt  index.html  proyecto/  samba_public/',
+ 'cat bienvenida.txt':()=>'¡Bienvenido a mi servidor! Gracias por visitar mi página.',
+ date:()=>new Date().toLocaleString('es-CO'),
+ ping:()=>'PING enterprise07: 4 paquetes enviados, 4 recibidos, 0% pérdida'
+};
+function run(raw){
+ const c=raw.trim().replace(/\s+/g,' ');
+ print('visitante@enterprise07:~$ '+raw,'in');
+ if(!c)return;
+ hist.push(c);hi=hist.length;
+ if(c==='clear'){out.innerHTML='';return}
+ if(c.startsWith('sudo'))return print('visitante no está en el archivo sudoers. Este incidente será reportado. 😄','err');
+ if(c.startsWith('rm'))return print('Buen intento. Este servidor está protegido. 🛡️','err');
+ const f=CMDS[c];
+ f?print(f()):print(c.split(' ')[0]+': comando no encontrado. Escribe help.','err');
+}
+inp.addEventListener('keydown',e=>{
+ if(e.key==='Enter'){run(inp.value);inp.value=''}
+ else if(e.key==='ArrowUp'&&hist.length){hi=Math.max(0,hi-1);inp.value=hist[hi]||'';e.preventDefault()}
+ else if(e.key==='ArrowDown'&&hist.length){hi=Math.min(hist.length,hi+1);inp.value=hist[hi]||'';e.preventDefault()}
+});
+tb.addEventListener('click',()=>inp.focus());
+document.querySelectorAll('.hint button').forEach(b=>b.onclick=()=>{run(b.dataset.c);inp.focus({preventScroll:true})});
+print('Bienvenido a enterprise07. Escribe help para ver los comandos.');
+
+/* ---- Juego: Defiende el servidor ---- */
+(function(){
+ const cv=document.getElementById('game'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+ const BAD=['malware','DDoS','exploit','phishing','fuerza bruta'],GOOD=['HTTP','SSH','SMB','LDAP'];
+ let st='idle',items=[],score=0,lives=3,t=0,spawn=0,fx=[],best=0;
+ try{best=+localStorage.getItem('best')||0}catch(e){}
+ function reset(){items=[];fx=[];score=0;lives=3;t=0;spawn=0;st='run'}
+ function add(){
+  const bad=Math.random()<0.55,l=bad?BAD[Math.random()*BAD.length|0]:GOOD[Math.random()*GOOD.length|0];
+  g.font='bold 15px system-ui';const w=g.measureText(l).width+28;
+  items.push({x:10+Math.random()*(W-w-20),y:-34,w,h:32,bad,l,v:1.2+Math.min(t/1800,3)+Math.random()*.6});
+ }
+ function hit(x,y){
+  for(let i=items.length-1;i>=0;i--){const it=items[i];
+   if(x>=it.x-6&&x<=it.x+it.w+6&&y>=it.y-6&&y<=it.y+it.h+6){
+    items.splice(i,1);
+    if(it.bad){score+=10;fx.push({x:it.x+it.w/2,y:it.y,s:'+10',c:'#22c55e',a:1})}
+    else{lives--;fx.push({x:it.x+it.w/2,y:it.y,s:'¡era bueno!',c:'#ef4444',a:1})}
+    return;}}
+ }
+ function press(e){
+  e.preventDefault();
+  if(st!=='run'){reset();return}
+  const r=cv.getBoundingClientRect();
+  hit((e.clientX-r.left)*W/r.width,(e.clientY-r.top)*H/r.height);
+ }
+ cv.addEventListener('pointerdown',press);
+ function rr(x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+ function text(s,x,y,sz,c,al){g.font='bold '+sz+'px system-ui';g.fillStyle=c;g.textAlign=al||'center';g.fillText(s,x,y)}
+ function update(){
+  t++;spawn--;
+  if(spawn<=0){add();spawn=Math.max(22,60-t/40)}
+  for(let i=items.length-1;i>=0;i--){const it=items[i];it.y+=it.v;
+   if(it.y>H-26){items.splice(i,1);
+    if(it.bad){lives--;fx.push({x:it.x+it.w/2,y:H-40,s:'¡ataque!',c:'#ef4444',a:1})}
+    else{score+=1}}}
+  fx.forEach(f=>{f.y-=.8;f.a-=.02});fx=fx.filter(f=>f.a>0);
+  if(lives<=0){st='over';if(score>best){best=score;try{localStorage.setItem('best',best)}catch(e){}}}
+ }
+ function draw(){
+  g.clearRect(0,0,W,H);
+  g.strokeStyle='rgba(99,102,241,.12)';for(let x=0;x<W;x+=40){g.beginPath();g.moveTo(x,0);g.lineTo(x,H);g.stroke()}
+  g.fillStyle='#16a34a';g.fillRect(0,H-22,W,22);text('🖥️ enterprise07',W/2,H-6,13,'#fff');
+  items.forEach(it=>{rr(it.x,it.y,it.w,it.h,8);g.fillStyle=it.bad?'#dc2626':'#16a34a';g.fill();
+   g.strokeStyle=it.bad?'#fca5a5':'#86efac';g.lineWidth=2;g.stroke();text((it.bad?'⚠ ':'')+it.l,it.x+it.w/2,it.y+21,14,'#fff')});
+  fx.forEach(f=>{g.globalAlpha=f.a;text(f.s,f.x,f.y,16,f.c);g.globalAlpha=1});
+  text('Puntos: '+score,12,26,16,'#e8ecf8','left');
+  text('❤️'.repeat(Math.max(lives,0)),W-12,26,16,'#fff','right');
+  text('Récord: '+best,W/2,26,13,'#9aa6c7');
+  if(st!=='run'){g.fillStyle='rgba(5,7,15,.82)';g.fillRect(0,0,W,H);
+   if(st==='idle'){text('Defiende el servidor',W/2,150,30,'#e8ecf8');text('Toca los ataques rojos, deja pasar los verdes',W/2,188,16,'#9aa6c7');text('▶ Toca para empezar',W/2,240,20,'#22d3ee')}
+   else{text('Servidor comprometido',W/2,140,30,'#ef4444');text('Puntos: '+score+'  ·  Récord: '+best,W/2,184,18,'#e8ecf8');text('↻ Toca para jugar otra vez',W/2,236,20,'#22d3ee')}}
+ }
+ (function loop(){if(st==='run')update();draw();requestAnimationFrame(loop)})();
+})();
+
+/* ---- Contacto ---- */
+const sb=document.getElementById('send-btns'),ok=document.getElementById('msg-ok');
+function msgText(){return 'Hola Eliel, soy '+document.getElementById('f-name').value+'. '+document.getElementById('f-msg').value}
+if(WHATSAPP){const b=document.createElement('button');b.className='btn primary';b.type='submit';b.textContent='Enviar por WhatsApp';b.dataset.k='w';sb.appendChild(b)}
+if(EMAIL){const b=document.createElement('button');b.className='btn ghost';b.type='submit';b.textContent='Enviar por correo';b.dataset.k='e';sb.appendChild(b)}
+if(!WHATSAPP&&!EMAIL){const b=document.createElement('button');b.className='btn primary';b.type='submit';b.textContent='Copiar mensaje';b.dataset.k='c';sb.appendChild(b)}
+document.getElementById('form').addEventListener('submit',e=>{
+ e.preventDefault();const k=e.submitter&&e.submitter.dataset.k,t=msgText();
+ if(k==='w')window.open('https://wa.me/'+WHATSAPP+'?text='+encodeURIComponent(t),'_blank');
+ else if(k==='e')location.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('Mensaje desde tu página')+'&body='+encodeURIComponent(t);
+ else if(navigator.clipboard){navigator.clipboard.writeText(t);ok.textContent='Mensaje copiado.'}
+});
+document.getElementById('share').onclick=async()=>{
+ const d={title:document.title,url:location.href};
+ try{if(navigator.share)await navigator.share(d);else{await navigator.clipboard.writeText(location.href);ok.textContent='Enlace copiado.'}}catch(e){}
+};
 </script>
 </body>
 </html>
