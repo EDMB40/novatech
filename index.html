@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NovaTech Solutions - Servidor Linux</title>
+<style>
+  :root { --bg:#0f172a; --card:#1e293b; --txt:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8; --ok:#4ade80; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--txt); line-height: 1.6; }
+  header { text-align: center; padding: 64px 20px 40px; background: linear-gradient(160deg, #0b2a4a, var(--bg)); }
+  header .tag { display: inline-block; font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 4px 12px; border-radius: 999px; margin-bottom: 18px; }
+  h1 { font-size: clamp(1.6rem, 5vw, 2.6rem); line-height: 1.2; }
+  header p { color: var(--muted); margin-top: 12px; }
+  main { max-width: 900px; margin: 0 auto; padding: 32px 20px 56px; }
+  h2 { font-size: 1.3rem; margin: 36px 0 16px; color: var(--accent); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+  .card { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid #334155; }
+  .card h3 { font-size: 1.05rem; margin-bottom: 6px; }
+  .card p { color: var(--muted); font-size: .92rem; }
+  .card .port { display: inline-block; margin-top: 10px; font-family: ui-monospace, Consolas, monospace; font-size: .8rem; color: var(--accent); }
+  .about { background: var(--card); border-radius: 12px; padding: 22px; border: 1px solid #334155; }
+  .status { display: flex; align-items: center; gap: 10px; margin-top: 28px; justify-content: center; color: var(--ok); font-weight: 600; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 rgba(74,222,128,.7); animation: pulse 2s infinite; }
+  @keyframes pulse { 70% { box-shadow: 0 0 0 12px rgba(74,222,128,0); } 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); } }
+  footer { text-align: center; color: var(--muted); font-size: .85rem; padding: 24px 20px 40px; border-top: 1px solid #334155; }
+</style>
+</head>
+<body>
+<header>
+  <span class="tag">Linux Server · Ubuntu 26.04 LTS</span>
+  <h1>Servidor empresarial configurado por<br>Eliel David Morrón Bolaño</h1>
+  <p>NovaTech Solutions S.A.S. · servidor <strong>enterprise07</strong></p>
+</header>
+
+<main>
+  <h2>Sobre el proyecto</h2>
+  <div class="about">
+    <p>Este servidor Ubuntu fue configurado como parte del taller práctico de Linux Server de Fundamentos de Sistemas Operativos, en la Corporación Universitaria Americana. El objetivo fue simular la infraestructura básica de una empresa: red, firewall, acceso remoto, archivos compartidos, web y directorio de usuarios.</p>
+  </div>
+
+  <h2>Servicios configurados</h2>
+  <div class="grid">
+    <div class="card"><h3>OpenSSH</h3><p>Administración remota y segura del servidor.</p><span class="port">puerto 22</span></div>
+    <div class="card"><h3>Samba</h3><p>Archivos compartidos entre Linux y Windows.</p><span class="port">puertos 139 · 445</span></div>
+    <div class="card"><h3>Apache</h3><p>Publicación web de esta página interna.</p><span class="port">puerto 80</span></div>
+    <div class="card"><h3>OpenLDAP</h3><p>Directorio centralizado de usuarios.</p><span class="port">puerto 389</span></div>
+    <div class="card"><h3>UFW</h3><p>Firewall: solo se abren los puertos necesarios.</p><span class="port">deny incoming</span></div>
+  </div>
+
+  <h2>Integrante del equipo</h2>
+  <div class="about"><p>Eliel David Morrón Bolaño — Ingeniería de Sistemas.</p></div>
+
+  <div class="status"><span class="dot"></span> Servidor funcionando correctamente</div>
+</main>
+
+<footer>NovaTech Solutions S.A.S. · Proyecto académico · 2026</footer>
+</body>
+</html>
